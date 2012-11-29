@@ -1,36 +1,84 @@
-################################################################################
-# Copyright (C) 2012 Leap Motion, Inc. All rights reserved.                    #
-# NOTICE: This developer release of Leap Motion, Inc. software is confidential #
-# and intended for very limited distribution. Parties using this software must #
-# accept the SDK Agreement prior to obtaining this software and related tools. #
-# This software is subject to copyright.                                       #
-################################################################################
+####################################################################################
+#	The MIT License																   #
+#																				   # 
+#	Copyright (C) 2012 Robert M. Hall, II, Inc. dba Feasible Impossibilities       #
+#	http://www.impossibilities.com/												   #
+#	 																			   #
+#	Permission is hereby granted, free of charge, to any person obtaining a copy   #
+#	of this software and associated documentation files (the "Software"), to deal  #
+#	in the Software without restriction, including without limitation the rights   #
+#	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      #
+#	copies of the Software, and to permit persons to whom the Software is          #
+#	furnished to do so, subject to the following conditions:					   #
+#	 																			   #
+#	The above copyright notice and this permission notice shall be included in     #
+#	all copies or substantial portions of the Software.							   #
+#	 																			   #
+#	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     #
+#	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       #
+#	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    #
+#	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         #
+#	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  #
+#	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN      #
+#	THE SOFTWARE.																   #
+####################################################################################
 
-################################################################################
-# Modified to add Socket Server and output functions by: Robert M. Hall, II    #
-# 11/27/2012 - http://www.impossibilities.com/ - Version 00.1a				   #
-################################################################################
+####################################################################################
+#  NOTICE: Software contains references to and uses the Leap Motion SDK/API:       #
+#  Copyright (C) 2012 Leap Motion, Inc. All rights reserved.                       #
+#  NOTICE: This developer release of Leap Motion, Inc. software is confidential    #
+#  and intended for very limited distribution. Parties using this software must    #
+#  accept the SDK Agreement prior to obtaining this software and related tools.    #
+#  This software is subject to copyright.                                          #
+####################################################################################
+
+####################################################################################
+# Runway Version 0.1a - 11/29/2012                                                 #
+####################################################################################
 
 import Leap, sys, math
 import socket
 import time
 from thread import *
 
-HOST = ''
-PORT = 8888
-	
-s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+class bcolors:
+	STRANGE = '\033[90m'
+	HEADER = '\033[95m'
+	OKBLUE = '\033[94m'
+	OKGREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	ENDC = '\033[0m'
+
+	def disable(self):
+		self.STRANGE = ''
+		self.HEADER = ''
+		self.OKBLUE = ''
+		self.OKGREEN = ''
+		self.WARNING = ''
+		self.FAIL = ''
+		self.ENDC = ''
 
 def setUpSocketServer():
+
+	listener = LeapListener()
+  	controller = Leap.Controller(listener)
 
 	lastInfo = ''
 	lastFrameID = ''
 
 	global frameID
-	global allData
+	global jsonStore
+	global flashSocketState
+	flashSocketState = False
 	
-	print  'Socket Created'
+	HOST = ''
+	PORT = 8888
+	
+	s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	
+	print bcolors.OKBLUE + 'Socket Created...'+ bcolors.ENDC
 	
 	try:
 		s.bind((HOST, PORT))
@@ -38,10 +86,10 @@ def setUpSocketServer():
 		print 'Bind Failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
 		sys.exit()
 	
-	print 'Socket BIND Complete'
+	print bcolors.OKBLUE + 'Socket BIND Complete...'+ bcolors.ENDC
 	
 	s.listen(10)
-	print 'Socket Now Listening'
+	print bcolors.OKBLUE + 'Socket Now Listening...'+ bcolors.ENDC
 		
 		#now keep talking with the client
 	while 1:
@@ -49,77 +97,97 @@ def setUpSocketServer():
 		conn, addr = s.accept()
 				
 		# Create a sample listener and assign it to a controller to receive events
-		print 'Connected with ' + addr[0] + ':' + str(addr[1])
+		print 'Connected with client at: ' + addr[0] + ':' + str(addr[1])
 		
 		telemetryInfo = ''
 		frameID = ''
 		lastFrameID = ''
-		allData = ''
+		jsonStore = ''
 		
-		#start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-		start_new_thread(clientthread ,(conn,))
+		print 'Beginning broadcast...'
 		
-		listener = LeapListener()
-  		controller = Leap.Controller(listener)
+		start_new_thread(clientThread ,(conn,))
 
+		#Before we start pushing out info wait a bit to avoid any potential issues
   		time.sleep(1);
+  		
+  		
   		while 1:
   				
   				telemetryInfo=''
-				if (frameID != lastFrameID and lastInfo != allData):
-					telemetryInfo = allData
+				if (frameID != lastFrameID and lastInfo != jsonStore and flashSocketState == True):
+					telemetryInfo = jsonStore
   				
-					if(allData != ""):
-						conn.sendall(telemetryInfo+"\n")
-  					
+					if(jsonStore != ""):
+						try:
+							conn.sendall(telemetryInfo+"\n")
+  						except socket.error , msg:
+							print  bcolors.FAIL + 'Socket Error - Code: ' + str(msg[0]) + ' Message ' + msg[1]+ bcolors.ENDC
+							conn, addr = s.accept()
+							print 'Connected with client at: ' + addr[0] + ':' + str(addr[1])
+							print 'Restarting broadcast...'
+							start_new_thread(clientThread ,(conn,))
+						
 				lastInfo = telemetryInfo
 				lastFrameID = frameID
+				#This sleep can be adjusted up or down- future iterations of the Leap SDK
+				#Have indicated more control over Frame update rate, etc.
 				time.sleep(0.02)
+
 
 	s.close()
 	
-#Function for handling connections. This will be used to create threads
-def clientthread(conn):
+#Handle incoming connection data on a thread for control commands since we primarily are pushing out data
+def clientThread(conn):
 
+    global flashSocketState
     #Sending message to connected client
-    conn.send('CONNECTED') #send only takes string
+    print 'Connected!'
+    conn.send('CONNECTED')
+    flashSocketState = True
      
-    #infinite loop so that function do not terminate and thread do not end.
+    #Infinite loop so that function does not terminate and thread does not end.
+    #Not totally neccessary, but may add some control functions in here from client
     while True:
         time.sleep(0.1)
         #Receiving from client
         data = conn.recv(1024)
-        reply = data; #.strip();
+        reply = data;
                 
-        print '"'+reply+'"'
+        print 'RECEIVED COMMAND: '+reply
         
         if not data:
             break
             
-        if (reply == 'INFO'):
-			reply = 'OK'		
-     
-        conn.sendall(reply)
-     
+        if (reply=="ACTIVATING" or reply=="DEACTIVATING"):
+			reply = 'OK'
+			conn.sendall(reply)	
+			if(reply=="ACTIVATING"):
+				flashSocketState=True
+			if(reply=="DEACTIVATING"):
+				flashSocketState=False	
+				
+          
     #came out of loop
     conn.close()
 
 class LeapListener(Leap.Listener):
 
 	def onInit(self, controller):
-		print "LEAP Initialized"
+		print bcolors.STRANGE + "LEAP Initialized"+ bcolors.ENDC
 
 	def onConnect(self, controller):
-		print "LEAP Connected"
+		print bcolors.OKGREEN + "LEAP Connected"+ bcolors.ENDC
+		print bcolors.WARNING + 'CTRL-C TO STOP'+ bcolors.ENDC
 
 	def onDisconnect(self, controller):
-		print "LEAP Disconnected"
+		print bcolors.FAIL + "LEAP Disconnected"+ bcolors.ENDC
 
 	def onFrame(self, controller):
 		global frameID
-		global allData
+		global jsonStore
 
-		allData = ''	
+		jsonStore = ''	
 		frame = controller.frame()
 		hands = frame.hands()
 		numHands = len(hands)
@@ -160,11 +228,11 @@ class LeapListener(Leap.Listener):
 		 
 			jsonData += '}}, "state":"frame" }'
 		   
-			allData = jsonData
+			jsonStore = jsonData
 		
 		else:
 			jsonData += '"hands": null }, "state":"frame" }'
-			allData = jsonData
+			jsonStore = jsonData
 	
 def generateFingerData(hand, handCnt, numHands):
 	
@@ -262,15 +330,10 @@ def generatePalmData(hand, handCnt, numHands):
 			
 def main():
 
-  setUpSocketServer()
-
-  # Keep this process running until Enter is pressed
-  print "Press Enter to quit..."
-  sys.stdin.readline()
-
-  # The controller must be disposed of before the listener
-  controller = None
-
+	try:
+		setUpSocketServer()
+	except KeyboardInterrupt:
+		print bcolors.FAIL + "\nCaught CTRL-C Interrupt, terminating..."+ bcolors.ENDC
 
 if __name__ == "__main__":
   main()
