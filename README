@@ -3,6 +3,9 @@ Robert M. Hall, II - http://www.impossibilities.com/
 
 Runway is a set of Python, Flash/ActionScript 3, and JavaScript helpers for leveraging data from LeapMotion input device - http://leapmotion.com/
 
+See a short video of this in action here:
+http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
+
 Current State as of 11/29/2012:
 
 	1. Functioning Python Socket server "Runway" to collect data from LeapMotion device, format into JSON and push out over a local socket port 8888.
