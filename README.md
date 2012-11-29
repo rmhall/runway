@@ -16,11 +16,11 @@ Current State as of 11/29/2012:
 	
 USAGE:
 
-	1. Drop the python/Runway.py python script in with you Leap libs in the Leap SDK
-	2. execute it with: python Runway.py - will start accepting connections
-	3. Publish the leap_tes1.fla or open the leap_test1.swf	and watch the fun
+	1. Drop the python/Runway.py python script in with your Leap libs in the Leap SDK folder
+	2. Launch it with: python Runway.py - App will start accepting connections
+	3. Publish the leap_test1.fla or open the leap_test1.swf - wiggle your fingers over your Leap and watch the fun
 	4. Observe output from terminal Runway.py app and Flash trace statements
-	5. Extend and enjoy!
+	5. Extend, modify, improve and enjoy!
 	
 TODO:
 
