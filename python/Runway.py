@@ -61,6 +61,7 @@ class bcolors:
 
 def setUpSocketServer():
 
+	# Create a Leap listener and assign it to a controller to receive events
 	listener = LeapListener()
   	controller = Leap.Controller(listener)
 
@@ -96,7 +97,6 @@ def setUpSocketServer():
 		#wait to accept a connection - blocking call
 		conn, addr = s.accept()
 				
-		# Create a sample listener and assign it to a controller to receive events
 		print 'Connected with client at: ' + addr[0] + ':' + str(addr[1])
 		
 		telemetryInfo = ''
