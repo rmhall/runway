@@ -3,17 +3,17 @@ Robert M. Hall, II - http://www.impossibilities.com/
 
 Runway is a set of Python, Flash/ActionScript 3, and JavaScript helpers for leveraging data from LeapMotion input device - http://leapmotion.com/
 
-Current State as of 11/27/2012:
+Current State as of 11/29/2012:
 
-	1. Functioning Python Socket server "Runway" to collect data from LeapMotion device, and push out over a local socket port 8888.
-	2. Functioning Flash library to connect via sockets to Runway Socket Server and allow push of data in realtime for use in ActionScript 3
-	3. Demo Flash file showing interaction
+	1. Functioning Python Socket server "Runway" to collect data from LeapMotion device, format into JSON and push out over a local socket port 8888.
+	2. Functioning Flash library to connect via sockets to Runway Socket Server and collecte JSON data for use in ActionScript 3
+	3. Demo Flash file showing interaction, finger tip data rendering
 	
 TODO:
-	1. Add support for additional "hands" in Runway - currently only supports first hand present
-	2. Additional refinements and data points in Runway Python socket server, and AS3 bridge classes
-	3. Add externalInterface bridge API in Flash to allow JavaScript communication - great for supporting older browsers with no websockets, or native plugins for LeapMotion
-	4. Websocket based JavaScript lib to match Flash/AS3 functionality for modern browsers
+	1. Add support for additional "hands" or "tools" in Runway - currently only supports first hand present
+	2. Additional refinements and data points in Runway Python socket server, and AS3 bridge classes (Learn more Python!)
+	3. Add externalInterface methods to allow SWF to run faceless and act as a bridge to JavaScript - great for supporting older browsers with no websockets, or native plugins for LeapMotion
+	4. Websocket based JavaScript lib to match Flash/AS3 functionality for modern browsers - see great example Leapfrog here using websockets, JSON and Processing:  https://github.com/tylerwilliams/leapfrog
 	5. Native Extension for Adobe AIR for Mac/PC to use native LeapMotion SDK to poll/collect data from LeapMotion for use in AS3/AIR apps.
 	
 		
