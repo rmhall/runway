@@ -1,7 +1,8 @@
 ﻿/*
 	The MIT License
 	 
-	Copyright (c) 2012 Robert M. Hall, II, Inc. dba Feasible Impossibilities - http://www.impossibilities.com/
+	Copyright (c) 2012 Robert M. Hall, II, Inc. dba Feasible Impossibilities
+	http://www.impossibilities.com/
 	 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +23,8 @@
 	THE SOFTWARE.
 */
 
-package com.impossibilities.leapmotion 
+// Version 0.1
+package com.impossibilities.runway.leapmotion 
 {
 
 	import flash.errors.*;
@@ -82,9 +84,47 @@ package com.impossibilities.leapmotion
 		private function readResponse(totalBytes):void
 		{
 			var str:String = readUTFBytes(bytesAvailable);
-			uiRef.sendData(str);
+			uiRef.acceptData(str);
 		}
 
+		public function sendCommand(cmd:String):void
+		{
+			writeln(cmd);
+		}
+
+		private function closeHandler(event:Event):void
+		{
+			trace(("closeHandler: " + event));
+			trace(response.toString());
+		}
+
+		private function connectHandler(event:Event):void
+		{
+			trace(("connectHandler: " + event));
+		}
+
+		private function ioErrorHandler(event:IOErrorEvent):void
+		{
+			trace(("ioErrorHandler: " + event));
+			if (event.errorID == 2031)
+			{
+				trace("Socket failed to connect");
+			}
+		}
+
+		private function securityErrorHandler(event:SecurityErrorEvent):void
+		{
+			trace(("securityErrorHandler: " + event));
+		}
+
+		private function socketDataHandler(event:ProgressEvent):void
+		{
+			//trace("socketDataHandler: " + event);
+			readResponse(event.bytesTotal);
+		}
+
+		// Helper functions for various data - most unused for this particular Leap project
+		// that is dealing with plain text/socket data
 		private function dec2hex(dec:String):String
 		{
 			var hex:String = "";//"0x";
@@ -109,7 +149,7 @@ package com.impossibilities.leapmotion
 			return c[l] + c[r];
 		}
 
-		public function hex2dec(hex:String):String
+		private function hex2dec(hex:String):String
 		{
 			var bytes:Array = [];
 			while (hex.length > 2)
@@ -121,7 +161,7 @@ package com.impossibilities.leapmotion
 			return bytes.join(".");
 		}
 
-		public function padString(str:String,len:Number,pad:String):String
+		private function padString(str:String,len:Number,pad:String):String
 		{
 			var newStr:String = "";
 			if (str.length < len)
@@ -129,51 +169,6 @@ package com.impossibilities.leapmotion
 				newStr = pad + str;
 			}
 			return newStr;
-		}
-
-
-		public function sendCommand(cmd:String):void
-		{
-			var avrCommand:String = cmd;
-			var avrLength:Number = avrCommand.length;
-			avrLength++;
-			var avrTotal:Number = avrLength + 16;
-			var avrCode:String = String.fromCharCode(avrLength);
-			var avrRequest:String = "ISCP\x00\x00\x00\x10\x00\x00\x00" + avrCode + "\x01\x00\x00\x00" + avrCommand + "\x0D\x0A";
-			trace(((("\nSendCommand: " + cmd) + " - ") + hex2dec(avrRequest)));
-			writeln(avrRequest);
-		}
-
-		private function closeHandler(event:Event):void
-		{
-			trace(("closeHandler: " + event));
-			trace(response.toString());
-		}
-
-		private function connectHandler(event:Event):void
-		{
-			trace(("connectHandler: " + event));
-
-		}
-
-		private function ioErrorHandler(event:IOErrorEvent):void
-		{
-			trace(("ioErrorHandler: " + event));
-			if (event.errorID == 2031)
-			{
-				trace("Socket failed to connect");
-			}
-		}
-
-		private function securityErrorHandler(event:SecurityErrorEvent):void
-		{
-			trace(("securityErrorHandler: " + event));
-		}
-
-		private function socketDataHandler(event:ProgressEvent):void
-		{
-			//trace("socketDataHandler: " + event);
-			readResponse(event.bytesTotal);
 		}
 
 	}

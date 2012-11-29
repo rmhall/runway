@@ -118,7 +118,7 @@ def setUpSocketServer():
 				if (frameID != lastFrameID and lastInfo != jsonStore and flashSocketState == True):
 					telemetryInfo = jsonStore
   				
-					if(jsonStore != ""):
+					if(telemetryInfo != "" and telemetryInfo is not None):
 						try:
 							conn.sendall(telemetryInfo+"\n")
   						except socket.error , msg:
