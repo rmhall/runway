@@ -204,7 +204,8 @@ class LeapListener(Leap.Listener):
 		if numHands >= 1:
 		 
 			jsonData += '"hands": '
-			# Get the hands!
+			# Get the hands - need to loop over all hands 
+			# Currently just the 1st hand - REVISIT!
 			#for hand in hands:
 			handCnt+=1
 			hand = hands[0]
