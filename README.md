@@ -11,7 +11,7 @@ http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
 Current State as of 11/29/2012:
 
 	1. Functioning Python Socket server "Runway" to collect data from LeapMotion device, format into JSON and push out over a local socket port 8888.
-	2. Functioning Flash library to connect via sockets to Runway Socket Server and collecte JSON data for use in ActionScript 3
+	2. Functioning Flash library to connect via sockets to Runway Socket Server and collect/push JSON data for use in ActionScript 3
 	3. Demo Flash file showing interaction, finger tip data rendering
 	
 USAGE:
