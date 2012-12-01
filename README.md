@@ -3,7 +3,7 @@ Runway 0.1a for Leap Motion
 Robert M. Hall, II - http://www.impossibilities.com/
 ----------------------------------------------------
 
-Runway is a set of Flash/ActionScript 3 classes and code for leveraging data from the Leap Motion input device - http://leapmotion.com/ 
+Runway is a set of Flash/ActionScript 3 classes and example code for leveraging data from the Leap Motion input device - http://leapmotion.com/ 
 
 See a short video of this in action here:
 http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
