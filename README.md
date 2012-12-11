@@ -10,6 +10,12 @@ http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
 
 Revision History:
 
+12/11/2012:
+	
+	1. Changed the fingertip rendering to be driven by enter_frame instead of the ondata websocket event, to avoid unneccessary drawing/code execution
+	2. Removed setting visibility, and moved to add or remove child model - need to fine tune this
+	3. Prepped for making a standalone SWF to act as polyfill for browsers that lack support for WebSockets to allow JS access to Leap data
+
 12/01/2012: 
 
 	1. Leap SDK 0.6.6 now includes its own WebSocket server on 6437, serving JSON based info on the data captured by the device - fantastic!
