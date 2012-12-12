@@ -11,6 +11,10 @@ http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
 Revision History:
 
 12/11/2012:
+
+	1. Added new polyfill shim .SWF and example in the JS folder. Allows Flash to act as a WebSocket polyfill for browsers that don't natively support Web Sockets
+
+12/11/2012:
 	
 	1. Changed the fingertip rendering to be driven by enter_frame instead of the ondata websocket event, to avoid unneccessary drawing/code execution
 	2. Removed setting visibility, and moved to add or remove child model - need to fine tune this
