@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<title>Leap JavaScript API with Flash Polyfill</title>
+
+</head>
+<body>
+<h1>Leap JavaScript/WebSocket Sample</h1>
+<h3>NOTES:</h3><p>This demo will automatically use the <a href="https://github.com/rmhall/Runway/">Runway</a> Flash based Polyfill for Web Sockets as long as the browser does not support native Web Sockets, and Flash 11.x is installed. Currently for this to work locally you must set the folder where the SWF file is operating as trusted with the Flash settings panel or Prefs Pane since it is talking to the network and there is no Socket Policy server in Leap yet. These issues will be resolved soon with future Leap SDK updates. To force the use of the Runway Polyfill in a browser with native Web Sockets, see page source for details.</p>
+<div id="flashShim">
+	<div id="flashContent">
+						<a href="http://www.adobe.com/go/getflash">
+							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						</a>
+	</div>
+</div>
+<div id="connection">WebSocket not connected</div>
+<div id="websocktype">WebSocket Type:</div>
+<div id="main" style="visibility:hidden">
+  <p>JSON Frame data:</p>
+  <div id="output"></div>
+</div>
+</body>
+<script>
+var ws;
+var flashWS = false;
+// Support both the WebSocket and MozWebSocket objects
+
+if ((typeof(WebSocket) == 'undefined') && (typeof(MozWebSocket) != 'undefined')) {
+  WebSocket = MozWebSocket;
+  flashWS = false;
+}
+
+if ((typeof(WebSocket) == 'undefined') && (typeof(MozWebSocket) == 'undefined')) {
+  flashWS = true;
+}
+
+// To force the Flash polyfill manually set flashWS to true
+//flashWS = true;
+
+if(flashWS) {
+	var flashvars = {};
+	var params = {};
+	var attributes = {};
+	params.bgcolor="#ffffff";
+	params.allowScriptAccess = "always";
+
+	// To avoid the Flash player throttling the SWF, it must be bigger than 0px, so 1x1 is a good default, position it so its visible somewhere in your layout, and adjust the color if needed
+	swfobject.embedSWF("runway_websocket_js_polyfill.swf", "flashContent", "1px", "1px", "11.0.0", "expressinstall.swf",flashvars, params, attributes, alertStatus);
+} else {
+	init();
+}
+
+function getSWF(movieName) 
+{ 
+    if (navigator.appName.indexOf("Microsoft") != -1) 
+    { 
+        return window[movieName]; 
+    } 
+    else 
+    { 
+        return document[movieName]; 
+    } 
+} 
+
+function alertStatus(e) {
+       console.log("e.success = " + e.success +"\ne.id = "+ e.id +"\ne.ref = "+ e.ref);
+}
+
+function flashWSready() {
+	init();
+}
+
+// Create the socket with event handlers
+function init() {
+
+  //Create and open the socket
+	if(!flashWS) {
+		console.log("Using Native WebSocket");
+		document.getElementById("websocktype").innerHTML += " Native Browser";
+		document.getElementById("flashContent").innerHTML = "";
+		ws = new WebSocket("ws://localhost:6437/");
+	} else {
+		console.log("Using Flash based WebSocket Polyfill");
+		document.getElementById("websocktype").innerHTML += " Runway Flash Polyfill";
+		ws = getSWF("flashContent");
+		ws.newWebSocket("ws://localhost:6437/");
+	}
+  
+  // On successful connection
+  ws.onopen = function(event) {
+    document.getElementById("main").style.visibility = "visible";
+    document.getElementById("connection").innerHTML = "WebSocket connection OPEN!";
+  };
+  
+  // On message received
+  ws.onmessage = function(event) {
+    //console.log(event);
+    if(event.data) {
+   	 var obj = JSON.parse(event.data);
+    } else {
+   	 var obj= JSON.parse(event);
+    }
+    var str = JSON.stringify(obj, undefined, 2);
+    document.getElementById("output").innerHTML = '<pre>' + str + '</pre>';
+  };
+  
+  // On socket close
+  ws.onclose = function(event) {
+    ws = null;
+    ws.close()
+    document.getElementById("main").style.visibility = "hidden";
+    document.getElementById("connection").innerHTML = "WebSocket Connection CLOSED";
+  }
+  
+  //On socket error
+  ws.onerror = function(event) {
+    alert("Received error");
+  };
+  
+}
+  
+</script>
+</html>
