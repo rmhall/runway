@@ -12,6 +12,10 @@ http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
 
 Revision History:
 
+01/11/2013:
+
+	1. Made some quick revisions to support the new json structure introduced with Leap Motion SDK 0.7.1
+
 12/11/2012:
 
 	1. Added new polyfill shim .SWF and example in the JS folder. Allows Flash to act as a WebSocket polyfill for browsers that don't natively support Web Sockets
