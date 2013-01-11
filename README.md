@@ -15,7 +15,8 @@ Revision History:
 01/11/2013:
 
 	1. Made some quick revisions to support the new json structure introduced with Leap Motion SDK 0.7.1
-
+	2. (Not included but coming soon - breaking apart .fla's to proper document class structure for better tracking of revisions on github, and compilation via mxmlc so no Flash IDE is required to compile)
+	
 12/11/2012:
 
 	1. Added new polyfill shim .SWF and example in the JS folder. Allows Flash to act as a WebSocket polyfill for browsers that don't natively support Web Sockets
