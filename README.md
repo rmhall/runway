@@ -47,11 +47,19 @@ Revision History:
 
 USAGE:	
 
-	1. make sure Leap application is open and Leap device is plugged in, and ready
+	1. Make sure Leap application is open and Leap device is plugged in, and ready
 	2. Open the runway_demo.fla in Flash CS6 and Publish Preview
 	3. Hit Connect button
 	4. Use the Leap with your hands - watch your finger tip points get rendered in real time :) 
 	5. Extend, modify, improve and enjoy!
+	
+	NOTE: The Leap SDK does not currently (as of SDK 0.7.1) come with a proper socket policy file server.
+	You will need to either set the proper permissions on your SWF locally, or run a socket policy file server.
+	A simple perl based solution is available here: http://www.lightsphere.com/dev/articles/flash_socket_policy.html
+	By default it is set to * for all sockets and * for all domains you can (should) adjust it from * to just port 6437
+	and any domains settings you might want to reflect. The Leap Motion SDK should come with a socket policy file server soon.
+
+	1. For leveraing the polyfill Flash based shim for JavaScript communications in older browsers, see the JS folder and the example html file source.
 	
 Pre 0.6.6 SDK (Deprecated Version) USAGE:
 
@@ -66,7 +74,7 @@ TODO:
 	1. DONE: Add support for additional "hands" or "tools" in Runway - currently only supports first hand present
 	2. DONE (No longer needed): Additional refinements and data points in Runway Python socket server, and AS3 bridge classes (Learn more Python!)
 	3. TODO: More actual demos of usage of the data for control/input, etc - getting the communication down first!
-	4. TODO: Add externalInterface methods to allow SWF to run faceless and act as a bridge to JavaScript - great for supporting older browsers with no websockets, or native plugins for LeapMotion
+	4. DONE: Add externalInterface methods to allow SWF to run faceless and act as a bridge to JavaScript - great for supporting older browsers with no websockets, or native plugins for LeapMotion
 	5. DONE: Now included as part of Leap SDK 0.6.6 built in Websocket server can be leveraged in JavaScript directly - see JS folder for example HTML/JS
 	6. MAYBE: (Now with built in WebSocket server in Leap this might not really be neccessary) Native Extension for Adobe AIR for Mac/PC to use native LeapMotion SDK to poll/collect data from LeapMotion for use in AS3/AIR apps.
 	
