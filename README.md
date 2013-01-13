@@ -12,6 +12,12 @@ http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
 
 Revision History:
 
+01/13/2013:
+
+	1. Refactored to proper package class structure for ease of use, and diff/change tracking in github
+	2. Prepped to decouple Leap to AS3 websocket communications completely from demonstration code portion showing finger/pointable position - for ease of use - End goal is a simple exposure of the Leap frame data via an event or callback - then developer can act on however they see fit - coming in next commit probably
+	3. Change approach to removing pointables from stage in demo (to refine further later) - prepped to decouple demonstration usage from core communications for ease of use - see #2 above - coming in next commit probably
+
 01/11/2013:
 
 	1. Made some quick revisions to support the new json structure introduced with Leap Motion SDK 0.7.1
