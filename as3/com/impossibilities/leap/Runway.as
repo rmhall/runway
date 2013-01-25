@@ -37,10 +37,11 @@
 		
 		WebSocket has dependencies on:
 		as3corelib:
-		https://github.com/mikechambers/as3corelib/
+		https://github.com/mikechambers/as3corelib/ (included as .swc lib and source)
 		and
-		Adobe's Flex SDK (tested with 4.6.0 and 4.6.1)
-		http://www.adobe.com/devnet/flex/flex-sdk-download.html
+		mx.utils.Base64Encoder.as (included)
+		
+		Removed dependency on Flex SDK (Thanks to Todd Greco!)
 	
 */
 

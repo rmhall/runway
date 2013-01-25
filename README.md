@@ -12,6 +12,10 @@ http://rhall.s3.amazonaws.com/runway_leapmotion_demo/runway_bridge_demo.mp4
 
 Revision History:
 
+01/25/2013:
+
+	1. Removed dependency on Flex SDK, instead now includes mx.utils.Base64Encoder.as, also included source for the as3corlib in addition to binary .swc for anyone having problems compiling. (Thanks to Todd Greco @mrballistic for the improvement!)
+
 01/13/2013:
 
 	1. Refactored to proper package class structure for ease of use, and diff/change tracking in github

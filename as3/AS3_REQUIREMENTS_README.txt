@@ -8,11 +8,12 @@ AS3 Dependencies:
 	Included in this project
 		
 		WebSocket has dependencies on:
-		as3corelib (also included in this project):
-		https://github.com/mikechambers/as3corelib/
+		as3corelib:
+		https://github.com/mikechambers/as3corelib/ (included as .swc lib and source)
 		and
-		Adobe's Flex SDK (tested with 4.6.0 and 4.6.1 NOT included in this project)
-		http://www.adobe.com/devnet/flex/flex-sdk-download.html
+		mx.utils.Base64Encoder.as (included)
+		
+		As of 01/25/2013 have removed dependency on Flex SDK (Thanks to Todd Greco @mrballistic for the improvement!)
 		
 
 From your ActionScript settings panel, make sure to include the path to either Flex SDK 4.6.0 or 4.6.1 in order for all the neccessary class files to be present. Same goes for the as3corelib SWC file. All other neccessary classes are included in the com class folder in this project.		
