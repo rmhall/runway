@@ -14,7 +14,9 @@ Revision History:
 
 01/29/2013:
 
-	1. Humbled by Victor Norgren's (@logotype) LeapMotion AS3 lib here: https://github.com/logotype/LeapMotionAS3 - I officially concede to the maxim that there is always someone out there smarter, faster and more motivated than yourself. For the record, Victor even dropped me an email offering to collaborate on making something really special together, so he is also a gentleman. My hat is off to you kind sir. So, forthwith, I humbly suggest any all interested parties, please peruse his library as a superior implementation. I plan on forking it for my own use and woth that burden lifted, refocus my efforts on actual applications and demonstrations on how the Leap Motion device can be used with Flash. This repository will remain for further examples applications, historical purposes an to serve as a constant reminder to always do good and acknowledge that the best way to learn is from others smarter than yourself. :)
+Humbled by Victor Norgren's (@logotype) LeapMotion AS3 lib here: 
+
+https://github.com/logotype/LeapMotionAS3 - I officially concede to the maxim that there is always someone out there smarter, faster and more motivated than yourself. For the record, Victor even dropped me an email offering to collaborate on making something really special together, so he is also a gentleman. My hat is off to you kind sir. So, forthwith, I humbly suggest any all interested parties, please peruse his library as a superior implementation. I plan on forking it for my own use and woth that burden lifted, refocus my efforts on actual applications and demonstrations on how the Leap Motion device can be used with Flash. This repository will remain for further examples applications, historical purposes an to serve as a constant reminder to always do good and acknowledge that the best way to learn is from others smarter than yourself. :)
 
 01/25/2013:
 
